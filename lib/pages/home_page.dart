@@ -36,10 +36,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 onTap: () {
-                  print("tap en la lista");
-                  // CupertinoPageRoute(builder: (_) => NewPassPage());
                   Navigator.pushNamed(context, 'new-pass');
-                  // Navigator.of(context).push(NewPassPageRoute());
                 },
               ),
             ],
