@@ -1,4 +1,5 @@
 import 'package:app_password_chest/pages/new_pass_page.dart';
+import 'package:app_password_chest/provider/db_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    DBProvider.db.initDB();
     return Scaffold(
       appBar: AppBar(
         title: Text("Banco"),

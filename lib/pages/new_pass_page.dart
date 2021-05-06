@@ -1,4 +1,4 @@
-import 'package:app_password_chest/models/account.dart';
+import 'package:app_password_chest/models/account_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,13 @@ class NewPassPage extends StatefulWidget {
 
 class _NewPassPageState extends State<NewPassPage> {
   // model
-  Account account = Account();
+  AccountModel account = AccountModel();
+  bool _showPassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +72,19 @@ class _NewPassPageState extends State<NewPassPage> {
                     ),
                     TextField(
                       keyboardType: TextInputType.text,
-                      obscureText: true,
+                      obscureText: this._showPassword,
                       decoration: InputDecoration(
                         hintText: "Contraseña",
+                        suffixIcon: IconButton(
+                          icon: this._showPassword
+                              ? Icon(Icons.remove_red_eye_outlined)
+                              : Icon(Icons.remove_red_eye_rounded),
+                          onPressed: () {
+                            setState(() {
+                              this._showPassword = !this._showPassword;
+                            });
+                          },
+                        ),
                       ),
                       onChanged: (String value) {
                         account.password = value;
@@ -96,6 +112,7 @@ class _NewPassPageState extends State<NewPassPage> {
                         print("url: ${this.account.url}");
                         print("password: ${this.account.password}");
                         print("note: ${this.account.note}");
+                        FocusScope.of(context).requestFocus(FocusNode());
                       },
                     ),
                   ],
