@@ -1,7 +1,9 @@
-import 'package:app_password_chest/models/account_model.dart';
-import 'package:app_password_chest/provider/db_provider.dart';
+import 'package:app_password_chest/models/argument_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:app_password_chest/enum/page_mode.dart';
+import 'package:app_password_chest/models/account_model.dart';
+import 'package:app_password_chest/provider/db_provider.dart';
 
 // class NewPassPageRoute extends CupertinoPageRoute {
 //   NewPassPageRoute()
@@ -18,6 +20,10 @@ import 'package:flutter/material.dart';
 // }
 
 class NewPassPage extends StatefulWidget {
+  final PageMode? pageMode;
+
+  const NewPassPage({this.pageMode});
+
   @override
   _NewPassPageState createState() => _NewPassPageState();
 }
@@ -26,16 +32,28 @@ class _NewPassPageState extends State<NewPassPage> {
   // model
   AccountModel account = AccountModel();
   bool _showPassword = true;
-  bool? _disabledSaveButton = true;
+  bool? _disabledSaveButton;
 
   @override
   void initState() {
     super.initState();
+    if (this.account.title == null) {
+      this._disabledSaveButton = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    // final Object?  arguments = ModalRoute.of(context)!.settings.arguments;
+    final Object? args =
+        ModalRoute.of(context)!.settings.arguments; // todo: probar
+
+    // print(arguments['page_mode']);
+    // print(arguments);
+    // if (arguments != null) {
+    //   print(arguments.arguments);
+    // }
 
     return Scaffold(
       appBar: AppBar(),
@@ -55,16 +73,15 @@ class _NewPassPageState extends State<NewPassPage> {
                       ),
                       onChanged: (String value) {
                         if (value.isEmpty) {
-                          print('esta vacio la wea');
                           setState(() {
-                            this._disabledSaveButton = null;
-                            print(this._disabledSaveButton);
+                            this._disabledSaveButton = true;
+                          });
+                        } else {
+                          setState(() {
+                            account.title = value;
+                            this._disabledSaveButton = false;
                           });
                         }
-                        setState(() {
-                          account.title = value;
-                          this._disabledSaveButton = false;
-                        });
                       },
                     ),
                     SizedBox(
@@ -125,9 +142,8 @@ class _NewPassPageState extends State<NewPassPage> {
                     ),
                     TextButton(
                       child: Text("Save"),
-                      onPressed: this._disabledSaveButton != null
-                          ? null
-                          : () {
+                      onPressed: this._disabledSaveButton != true
+                          ? () {
                               DBProvider.db.newAccount(this.account);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -142,7 +158,8 @@ class _NewPassPageState extends State<NewPassPage> {
                               );
                               FocusScope.of(context).requestFocus(FocusNode());
                               Navigator.of(context).pop();
-                            },
+                            }
+                          : null,
                     ),
                   ],
                 ),

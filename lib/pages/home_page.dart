@@ -1,3 +1,5 @@
+import 'package:app_password_chest/enum/page_mode.dart';
+import 'package:app_password_chest/models/argument_model.dart';
 import 'package:app_password_chest/pages/new_pass_page.dart';
 import 'package:app_password_chest/provider/db_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,7 +39,13 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, 'new-pass');
+                  Navigator.pushNamed(
+                    context,
+                    'new-pass',
+                    arguments: {
+                      ArgumentModel(PageMode.edit),
+                    },
+                  );
                 },
               ),
             ],
