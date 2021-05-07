@@ -11,7 +11,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    DBProvider.db.initDB();
     return Scaffold(
       appBar: AppBar(
         title: Text("Banco"),

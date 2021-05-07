@@ -21,7 +21,6 @@ class DBProvider {
   Future<Database?> initDB() async {
     Directory documentsDiretory = await getApplicationDocumentsDirectory();
     final path = join(documentsDiretory.path, 'Accounts.db');
-    print(path);
 
     // crear db
     return await openDatabase(path, version: 1,
@@ -40,7 +39,7 @@ class DBProvider {
 
   Future<int?> newAccount(AccountModel accountModel) async {
     final db = await database;
-    final res = db?.insert('account', accountModel.toJson());
+    final res = await db?.insert('account', accountModel.toJson());
     return res;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:app_password_chest/models/account_model.dart';
+import 'package:app_password_chest/provider/db_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class _NewPassPageState extends State<NewPassPage> {
   // model
   AccountModel account = AccountModel();
   bool _showPassword = true;
+  bool? _disabledSaveButton = true;
 
   @override
   void initState() {
@@ -52,7 +54,17 @@ class _NewPassPageState extends State<NewPassPage> {
                         hintText: "Titulo",
                       ),
                       onChanged: (String value) {
-                        account.title = value;
+                        if (value.isEmpty) {
+                          print('esta vacio la wea');
+                          setState(() {
+                            this._disabledSaveButton = null;
+                            print(this._disabledSaveButton);
+                          });
+                        }
+                        setState(() {
+                          account.title = value;
+                          this._disabledSaveButton = false;
+                        });
                       },
                     ),
                     SizedBox(
@@ -64,7 +76,9 @@ class _NewPassPageState extends State<NewPassPage> {
                         hintText: "Url",
                       ),
                       onChanged: (String value) {
-                        account.url = value;
+                        setState(() {
+                          account.url = value;
+                        });
                       },
                     ),
                     SizedBox(
@@ -87,7 +101,9 @@ class _NewPassPageState extends State<NewPassPage> {
                         ),
                       ),
                       onChanged: (String value) {
-                        account.password = value;
+                        setState(() {
+                          account.password = value;
+                        });
                       },
                     ),
                     SizedBox(
@@ -99,7 +115,9 @@ class _NewPassPageState extends State<NewPassPage> {
                         hintText: "Nota",
                       ),
                       onChanged: (String value) {
-                        account.note = value;
+                        setState(() {
+                          account.note = value;
+                        });
                       },
                     ),
                     SizedBox(
@@ -107,13 +125,24 @@ class _NewPassPageState extends State<NewPassPage> {
                     ),
                     TextButton(
                       child: Text("Save"),
-                      onPressed: () {
-                        print("title: ${this.account.title}");
-                        print("url: ${this.account.url}");
-                        print("password: ${this.account.password}");
-                        print("note: ${this.account.note}");
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
+                      onPressed: this._disabledSaveButton != null
+                          ? null
+                          : () {
+                              DBProvider.db.newAccount(this.account);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text('Save Succesfully'),
+                                  action: SnackBarAction(
+                                    label: 'Action',
+                                    onPressed: () {
+                                      // Code to execute.
+                                    },
+                                  ),
+                                ),
+                              );
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              Navigator.of(context).pop();
+                            },
                     ),
                   ],
                 ),
