@@ -23,13 +23,14 @@ class DBProvider {
     final path = join(documentsDiretory.path, 'Accounts.db');
 
     // crear db
-    return await openDatabase(path, version: 1,
+    return await openDatabase(path, version: 2,
         onCreate: (Database db, int version) async {
       await db.execute('''
           CREATE TABLE account(
             id INTEGER PRIMARY KEY,
             title TEXT,
             url TEXT,
+            email TEXT,
             password TEXT,
             note TEXT
           )
@@ -37,9 +38,47 @@ class DBProvider {
     });
   }
 
+  // crear registro
   Future<int?> newAccount(AccountModel accountModel) async {
     final db = await database;
     final res = await db?.insert('account', accountModel.toJson());
+    return res;
+  }
+
+  Future<AccountModel?> getAccountById(int id) async {
+    final db = await database;
+    final res = await db!.query('account', where: 'id = ?', whereArgs: [id]);
+    return res.isNotEmpty ? AccountModel.fromJson(res.first) : null;
+  }
+
+  Future<List<AccountModel>?> getAccounts() async {
+    final db = await database;
+    final res = await db!.query('account');
+    return res.isNotEmpty ? res.map((e) => AccountModel.fromJson(e)).toList() : [];
+  }
+
+
+  Future<int> updateAccount(AccountModel accountModel) async {
+    final db = await database;
+    final res = await db!.update(
+        'account',
+        accountModel.toJson(),
+        where: 'id = ?',
+        whereArgs: [accountModel.id]
+    );
+    return res;
+  }
+
+
+  Future<int> deleteAccount(int id) async {
+    final db = await database;
+    final res = db!.delete('account', where: 'id = ?', whereArgs: [id]);
+    return res;
+  }
+
+  Future<int> deleteAllAccounts() async {
+    final db = await database;
+    final res = db!.delete('account');
     return res;
   }
 }

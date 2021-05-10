@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (_) => HomePage(),
-        'new-pass': (_) => NewPassPage(),
+        NewPassPage.routeName: (_) => NewPassPage(),
       },
     );
   }

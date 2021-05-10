@@ -2,28 +2,24 @@ class AccountModel {
   int? id;
   String? title;
   String? url;
+  String? email;
   String? password;
   String? note;
 
   AccountModel({
     this.id,
     this.title,
+    this.email,
     this.url,
     this.password,
     this.note,
   });
 
-  // AccountModel.fromMap(Map<String, dynamic> res)
-  //     : id = res["id"],
-  //       title = res["title"],
-  //       url = res["url"],
-  //       password = res["password"],
-  //       note = res["note"];
-
   factory AccountModel.fromJson(Map<String, dynamic> res) => AccountModel(
         id: res["id"],
         title: res["title"],
         url: res["url"],
+        email: res["email"],
         password: res["password"],
         note: res["note"],
       );
@@ -33,6 +29,7 @@ class AccountModel {
     return {
       'id': id,
       'title': title,
+      'email': email,
       'url': url,
       'password': password,
       'note': note,

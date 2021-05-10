@@ -1,5 +1,6 @@
 import 'package:app_password_chest/enum/page_mode.dart';
 import 'package:app_password_chest/models/argument_model.dart';
+import 'package:app_password_chest/models/pass_model.dart';
 import 'package:app_password_chest/pages/new_pass_page.dart';
 import 'package:app_password_chest/provider/db_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +20,15 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                NewPassPage.routeName,
+                arguments: ArgumentModel(
+                  pageMode: PageMode.save,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -41,10 +50,12 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    'new-pass',
-                    arguments: {
-                      ArgumentModel(PageMode.edit),
-                    },
+                    NewPassPage.routeName,
+                    arguments: ArgumentModel(
+                      pageMode: PageMode.edit,
+                      passModel:
+                          new PassModel(1, 'Facebook', 'correo@gmail.com'),
+                    ),
                   );
                 },
               ),
