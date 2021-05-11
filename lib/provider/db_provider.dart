@@ -19,11 +19,12 @@ class DBProvider {
   }
 
   Future<Database?> initDB() async {
-    Directory documentsDiretory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDiretory.path, 'Accounts.db');
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    final path = join(documentsDirectory.path, 'Accounts.db');
+    print(path);
 
     // crear db
-    return await openDatabase(path, version: 2,
+    return await openDatabase(path, version: 8,
         onCreate: (Database db, int version) async {
       await db.execute('''
           CREATE TABLE account(

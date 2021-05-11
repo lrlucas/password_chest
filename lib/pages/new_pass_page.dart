@@ -1,9 +1,11 @@
 import 'package:app_password_chest/enum/page_mode.dart';
 import 'package:app_password_chest/models/argument_model.dart';
+import 'package:app_password_chest/service/account_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app_password_chest/models/account_model.dart';
 import 'package:app_password_chest/provider/db_provider.dart';
+import 'package:provider/provider.dart';
 
 // class NewPassPageRoute extends CupertinoPageRoute {
 //   NewPassPageRoute()
@@ -67,12 +69,15 @@ class _NewPassPageState extends State<NewPassPage> {
     // final Object? arguments = ModalRoute.of(context)!.settings.arguments;
     final ArgumentModel args =
         ModalRoute.of(context)!.settings.arguments as ArgumentModel;
-    print(args.pageMode);
+
 
     switch (args.pageMode) {
       case PageMode.edit:
-        this._titleController.text = args.passModel!.title;
-        this._emailController.text = args.passModel!.email;
+        this._titleController.text = args.passModel!.title ?? '';
+        this._urlController.text = args.passModel!.url ?? '';
+        this._emailController.text = args.passModel!.email ?? '';
+        this._passController.text = args.passModel!.password ?? '';
+        this._noteController.text = args.passModel!.note ?? '';
         return Scaffold(
           appBar: AppBar(),
           body: Padding(
@@ -179,7 +184,13 @@ class _NewPassPageState extends State<NewPassPage> {
                           onPressed: this._disabledSaveButton != true ||
                                   this._titleController.text.length > 0
                               ? () {
-                                  DBProvider.db.newAccount(this.account);
+                                  // DBProvider.db.newAccount(this.account);
+
+                                  final newAccount = Provider.of<AccountProvider>(context, listen: false);
+                                  newAccount.newAccount(this.account);
+
+
+
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: const Text('Edit Succesfully'),
@@ -261,7 +272,7 @@ class _NewPassPageState extends State<NewPassPage> {
                           ),
                           onChanged: (String value) {
                             setState(() {
-                              account.url = value;
+                              account.email = value;
                             });
                           },
                         ),
@@ -312,7 +323,8 @@ class _NewPassPageState extends State<NewPassPage> {
                           onPressed: this._disabledSaveButton != true ||
                                   this._titleController.text.length > 0
                               ? () {
-                                  DBProvider.db.newAccount(this.account);
+                                  final newAccount = Provider.of<AccountProvider>(context, listen: false);
+                                  newAccount.newAccount(this.account);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: const Text('Save Succesfully'),
