@@ -51,6 +51,44 @@ class _NewPassPageState extends State<NewPassPage> {
     if (this.account.title == null) {
       this._disabledSaveButton = true;
     }
+
+    // //
+    // final ArgumentModel args =
+    // ModalRoute.of(context)!.settings.arguments as ArgumentModel;
+    //
+    // // this._titleController.text = args.passModel!.title ?? '';
+    // this.account.title = args.passModel!.title ?? '';
+    // this._titleController.text = this.account.title!;
+    // this._titleController.selection = TextSelection.fromPosition(TextPosition(offset: this._titleController.text.length));
+    //
+    // this._urlController.text = args.passModel!.url ?? '';
+    // this._emailController.text = args.passModel!.email ?? '';
+    // this._passController.text = args.passModel!.password ?? '';
+    // this._noteController.text = args.passModel!.note ?? '';
+  }
+
+  @override
+  void didChangeDependencies() {
+
+    final ArgumentModel args =
+    ModalRoute.of(context)!.settings.arguments as ArgumentModel;
+    // print(args.passModel!.id);
+    if (args.pageMode == PageMode.save) {
+      this.account.id = args.passModel!.id ?? 0;
+
+      // this._titleController.text = args.passModel!.title ?? '';
+      this.account.title = args.passModel!.title ?? '';
+      this._titleController.text = this.account.title!;
+      this._titleController.selection = TextSelection.fromPosition(TextPosition(offset: this._titleController.text.length));
+
+      this.account.url = args.passModel!.url ?? '';
+      this.account.email = args.passModel!.email ?? '';
+      this.account.password = args.passModel!.password ?? '';
+      this.account.note = args.passModel!.note ?? '';
+    }
+
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -66,18 +104,14 @@ class _NewPassPageState extends State<NewPassPage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    // final Object? arguments = ModalRoute.of(context)!.settings.arguments;
+    // final ArgumentModel args =
+    //     ModalRoute.of(context)!.settings.arguments as ArgumentModel;
     final ArgumentModel args =
-        ModalRoute.of(context)!.settings.arguments as ArgumentModel;
-
+    ModalRoute.of(context)!.settings.arguments as ArgumentModel;
 
     switch (args.pageMode) {
       case PageMode.edit:
-        this._titleController.text = args.passModel!.title ?? '';
-        this._urlController.text = args.passModel!.url ?? '';
-        this._emailController.text = args.passModel!.email ?? '';
-        this._passController.text = args.passModel!.password ?? '';
-        this._noteController.text = args.passModel!.note ?? '';
+
         return Scaffold(
           appBar: AppBar(),
           body: Padding(
@@ -102,7 +136,7 @@ class _NewPassPageState extends State<NewPassPage> {
                               });
                             } else {
                               setState(() {
-                                account.title = value;
+                                this.account.title = value;
                                 this._disabledSaveButton = false;
                               });
                             }
@@ -184,11 +218,9 @@ class _NewPassPageState extends State<NewPassPage> {
                           onPressed: this._disabledSaveButton != true ||
                                   this._titleController.text.length > 0
                               ? () {
-                                  // DBProvider.db.newAccount(this.account);
 
                                   final newAccount = Provider.of<AccountProvider>(context, listen: false);
-                                  newAccount.newAccount(this.account);
-
+                                  newAccount.updateAccount(this.account);
 
 
                                   ScaffoldMessenger.of(context).showSnackBar(

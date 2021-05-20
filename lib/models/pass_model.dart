@@ -6,14 +6,6 @@ class PassModel {
   String? note;
   String? password;
 
-  // PassModel(
-  //     this.id,
-  //     this.title,
-  //     this.email,
-  //     this.url,
-  //     this.note,
-  //     this.password
-  //     );
 
   PassModel({
     this.id = 0,

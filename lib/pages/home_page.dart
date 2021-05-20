@@ -18,8 +18,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   @override
+  void initState() {
+    super.initState();
+    // Provider.of<AccountProvider>(context).loadAccounts();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final accountList = Provider.of<AccountProvider>(context); // TODO: listen en false para que no se redibuje el widget
+    accountList.loadAccounts();
     final accounts = accountList.accounts;
     return Scaffold(
       appBar: AppBar(
@@ -63,11 +70,11 @@ class _HomePageState extends State<HomePage> {
                         passModel:
                             new PassModel(
                               id: accounts[i].id!,
-                              title:  accounts[i].title!,
-                              email:  accounts[i].email!,
-                              url:  accounts[i].url!,
-                              note:  accounts[i].note!,
-                              password:  accounts[i].password!
+                              title:  accounts[i].title ?? '',
+                              email:  accounts[i].email ?? '',
+                              url:  accounts[i].url ?? '',
+                              note:  accounts[i].note ?? '',
+                              password:  accounts[i].password ?? ''
                             )
                       ),
                     );

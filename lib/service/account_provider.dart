@@ -8,6 +8,11 @@ class AccountProvider extends ChangeNotifier {
   List<AccountModel> accounts = [];
 
 
+  // AccountProvider() {
+  //   this.loadAccounts();
+  // }
+
+
 
   newAccount(AccountModel accountModel) async {
     final id = await DBProvider.db.newAccount(accountModel);
